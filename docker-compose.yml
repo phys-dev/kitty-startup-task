@@ -1,0 +1,29 @@
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - sockets:/sockets
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - frontend
+      - backend
+
+  frontend:
+    build: ./frontend
+    volumes:
+      - sockets:/sockets
+    environment:
+      - SOCKET_PATH=/sockets/frontend.sock
+
+  backend:
+    build: ./backend
+    volumes:
+      - sockets:/sockets
+    environment:
+      - SOCKET_PATH=/sockets/backend.sock
+
+volumes:
+  sockets:
