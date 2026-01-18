@@ -7,7 +7,7 @@ app.set('views', path.join(__dirname, '/'));
 app.set('view engine', 'jade');
 
 const socketPath = "/sockets/frontend.sock";
-const backendUrl = "http://nginx/api";
+const backendUrl = "http://backend:8080";
 
 app.get('/', async (req, res) => {
     const cat_data = await fetch(`${backendUrl}/cat_get`);
