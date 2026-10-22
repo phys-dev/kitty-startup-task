@@ -1,0 +1,16 @@
+{
+    "name": "hw",
+    "version": "1.0.0",
+    "author": "Slava Fedorov <slava@fuodorov.ru>",
+    "dependencies": {
+        "express": "latest",
+        "jade": "latest"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.21",
+        "typescript": "^5.5.3"
+    },
+    "scripts": {
+        "build": "tsc frontend.ts"
+    }
+}
