@@ -7,26 +7,27 @@ docker compose build
 docker compose up -d
 ```
 
-Сайт: http://localhost. API: http://localhost/api/cat_get.
+Сайт: http://localhost.
 
-Nginx принимает запросы на порту 80. Он передаёт страницу во frontend,
-а запросы `/api/` — в backend. Frontend обращается к `backend:3001`.
-Порты 3000 и 3001 наружу не опубликованы.
+Во frontend Nginx принимает запрос на порту 80 и передаёт его Node через
+`/tmp/frontend.sock`. Node запрашивает картинку у `backend:3000/cat_get`.
+Во втором контейнере свой Nginx передаёт этот запрос Python через
+`/tmp/backend.sock`. Наружу опубликован только порт 80 фронтенда.
 
 Проверка:
 
 ```bash
 docker compose ps
 curl http://localhost
-curl http://localhost/api/cat_get
-curl --connect-timeout 2 http://localhost:3001/cat_get
+docker compose exec frontend wget -qO- http://backend:3000/cat_get
+curl --connect-timeout 2 http://localhost:3000/cat_get
 ```
 
 Последняя команда должна завершиться ошибкой подключения.
 Для получения картинки нужен доступ к The Cat API.
 
-Проверил сборку и запуск в Ubuntu 24.04. Страница и API отвечают,
-порт 3001 с хоста недоступен. В `docker compose ps` опубликован только порт Nginx.
+Проверил сборку и запуск в Ubuntu. Страница и внутренний API отвечают,
+а порт 3000 с хоста недоступен.
 
 Остановка:
 
