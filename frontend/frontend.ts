@@ -1,12 +1,13 @@
 import * as express from "express";
+import { chmodSync, rmSync } from "fs";
 import * as path from "path";
 
 const app = express();
 app.set('views', path.join(__dirname, '/'));
 app.set('view engine', 'jade');
 
-const port: number = 3000;
-const backendUrl = "http://backend:3001";
+const socket = "/tmp/frontend.sock";
+const backendUrl = "http://backend:3000";
 
 app.get('/', async (req, res) => {
     try {
@@ -21,6 +22,5 @@ app.get('/', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Frontend app listening on port ${port}`)
-})
+rmSync(socket, { force: true });
+app.listen(socket, () => chmodSync(socket, 0o666));
