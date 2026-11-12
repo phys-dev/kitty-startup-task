@@ -1,16 +1,10 @@
 services:
-  nginx:
-    build: ./nginx
+  frontend:
+    build: ./frontend
     ports:
       - "80:80"
     depends_on:
-      - frontend
       - backend
-
-  frontend:
-    build: ./frontend
-    expose:
-      - "3000"
 
   backend:
     build: ./backend

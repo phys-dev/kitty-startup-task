@@ -1,7 +1,10 @@
-FROM node:18-alpine
+FROM node:20-alpine
+RUN apk add --no-cache nginx
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-EXPOSE 3000
-CMD ["npx", "ts-node", "fronted.ts"]
+RUN npm run build
+COPY nginx.conf /etc/nginx/http.d/default.conf
+EXPOSE 80
+CMD ["sh", "-c", "node frontend.js & nginx -g 'daemon off;'"]
